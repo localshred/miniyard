@@ -66,5 +66,9 @@ module MiniYard
       end
     end
     
+    def miniyard_version
+      "v#{MiniYard::VERSION}"
+    end
+    
   end
 end

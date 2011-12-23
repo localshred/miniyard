@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.version     = MiniYard::VERSION
   s.authors     = ["BJ Neilsen"]
   s.email       = ["bj.neilsen@gmail.com"]
-  s.homepage    = ""
+  s.homepage    = "http://www.rand9.com"
   s.summary     = %q{A static html framebuilder to host multiple documentation folders}
   s.description = s.summary
 
