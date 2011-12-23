@@ -1,5 +1,6 @@
 require "miniyard/version"
 require 'fileutils'
+require 'haml'
 
 module MiniYard
   class Generate
@@ -10,6 +11,7 @@ module MiniYard
     end
     
     def run
+      $stdout.puts('Generating miniyard at '+@root)
       FileUtils.rm(index_file) if index_exists?
       output = haml_render(index_template)
       write_file(index_file, output)

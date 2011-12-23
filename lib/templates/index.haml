@@ -5,10 +5,10 @@
     %link{rel: 'stylesheet', type: 'text/css', href: './bootstrap.1.4.0.min.css'}
     :javascript
       function selectFolder(anchor, folder) {
-        document.getElementById('index-frame-link').href = './'+folder+'/index.html';
-        document.getElementById('frames-frame-link').href = './'+folder+'/frames.html';
+        document.getElementById('doc-frame-link').href = './'+folder+'/doc/index.html';
+        document.getElementById('cov-frame-link').href = './'+folder+'/cov/index.html';
         setActive(anchor);
-        setActive(document.getElementById('index-frame-link'));
+        setActive(document.getElementById('doc-frame-link'));
       }
       function setActive(anchor) {
         var ul = anchor.parentElement.parentElement;
@@ -38,15 +38,15 @@
         %ul
           - folders.each do |folder|
             %li
-              %a{id: "#{folder}-link", href: "./#{folder}/index.html", target: 'frame', onclick: "javascript: selectFolder(this, '#{folder}')"}
+              %a{id: "#{folder}-link", href: "./#{folder}/doc/index.html", target: 'frame', onclick: "javascript: selectFolder(this, '#{folder}')"}
                 = folder
             
       .content
         %ul#pill-nav.pills{"data-pills" => "pills"}
           %li
-            %a{id: "index-frame-link", href: '#', target: "frame", onclick: "javascript: setActive(this)"} No Frames
+            %a{id: "doc-frame-link", href: 'javascript: void(0);', target: "frame", onclick: "javascript: setActive(this)"} Documentation
           %li
-            %a{id: "frames-frame-link", href: '#', target: "frame", onclick: "javascript: setActive(this)"} Frames
+            %a{id: "cov-frame-link", href: 'javascript: void(0);', target: "frame", onclick: "javascript: setActive(this)"} Coverage
         %iframe#frame{name: 'frame', frameborder: '0'}
         %h3.title
           %span.bracket [

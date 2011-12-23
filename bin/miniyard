@@ -2,15 +2,33 @@
 
 require 'optparse'
 require 'miniyard'
-require 'haml'
+require 'miniyard/copy'
 
-docroot = Dir.pwd
+options = {
+  root: Dir.pwd,
+  doc: nil,
+  cov: nil,
+  name: nil
+}
+
 OptionParser.new do |opts|
-  opts.banner = "Usage: miniyard [options] app_file.rb"
-  opts.on("-d PATH", "--docroot=PATH", "The root path to the hosted docs") do |v|
-    docroot = v
+  opts.banner = "Usage: miniyard [options] [command]"
+  opts.on("-r PATH", "--root=PATH", "The root path to the hosted docs") do |v|
+    options[:root] = v
+  end
+  opts.on("-d SOURCE_DOCS""--doc=SOURCE_DOCS", "Docs folder to copy (requires --name option)") do |v|
+    options[:doc] = v
+  end
+  opts.on("-c SOURCE_COVERAGE", "--cov=SOURCE_COVERAGE", "Coverage folder to copy (requires --name option)") do |v|
+    options[:cov] = v
+  end
+  opts.on("-n NAME", "--name=NAME", "The name of the application folder in root. (Only applies to --cpdoc or --cpcov flags)") do |v|
+    options[:name] = v
   end
 end.parse!
 
-$stdout.puts('Generating docs at '+docroot)
-MiniYard::Generate.new(docroot).run
+if options[:doc] || options[:cov]
+  MiniYard::Copy.new(options).run
+end
+
+MiniYard::Generate.new(options[:root]).run
