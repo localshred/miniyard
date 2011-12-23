@@ -1,0 +1,37 @@
+!!! 5
+%html
+  %head
+    %title [ MiniYard ]
+    %link{rel: 'stylesheet', type: 'text/css', href: './bootstrap.1.4.0.min.css'}
+    :javascript
+      function selectFolder(anchor, folder) {
+        console.dir(anchor.parentElement.parentElement);
+        var ul = anchor.parentElement.parentElement;
+        for (var i = 0; i < ul.children.length; i++) {
+          var li = ul.children[i];
+          console.dir(li);
+          li.classList.remove('active');
+        }
+        anchor.parentNode.classList.add('active');
+        document.getElementById('frame').src = './'+folder+'/index.html';
+      }
+    :css
+      html,body { height: 100%; margin: 0; padding: 0; }
+      .sidebar ul { list-style-type: none; margin: 0; padding: 0; }
+      .sidebar ul li { border-bottom: 1px solid #eee; font-size: 20px; text-align: right; }
+      .sidebar ul li a { padding: 10px 10px; display: inline-block; }
+      .sidebar ul li.active { font-weight: bold; background: #eee; }
+      #frame { width: 100%; min-height: 100%; }
+      
+    
+  %body
+    .container-fluid
+      .sidebar
+        %ul
+          %li.title
+            %h1 [ MiniYard ]
+          - folders.each do |folder|
+            %li
+              %a{id: "#{folder}-link", href: '#', onclick: "javascript: selectFolder(this, '#{folder}')"}= folder
+      .content
+        %iframe#frame{width: '100%', height: '100%', frameborder: '0'}

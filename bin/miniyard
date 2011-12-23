@@ -1,0 +1,16 @@
+#!/usr/bin/env ruby
+
+require 'optparse'
+require 'miniyard'
+require 'haml'
+
+docroot = Dir.pwd
+OptionParser.new do |opts|
+  opts.banner = "Usage: miniyard [options] app_file.rb"
+  opts.on("-d PATH", "--docroot=PATH", "The root path to the hosted docs") do |v|
+    docroot = v
+  end
+end.parse!
+
+$stdout.puts('Generating docs at '+docroot)
+MiniYard::Generate.new(docroot).run
