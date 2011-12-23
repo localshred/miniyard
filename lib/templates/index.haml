@@ -4,29 +4,16 @@
     %title [ MiniYard ]
     %link{rel: 'stylesheet', type: 'text/css', href: './bootstrap.1.4.0.min.css'}
     :javascript
-      var folderSelected = false;
       function selectFolder(anchor, folder) {
-        folderSelected = true;
-        var ul = anchor.parentElement.parentElement;
-        for (var i = 0; i < ul.children.length; i++) {
-          var li = ul.children[i];
-          li.classList.remove('active');
-        }
-        anchor.parentNode.classList.add('active');
-        document.getElementById('frame').src = './'+folder+'/index.html';
-        selectFrameNav(document.getElementById('index-frame-link'), 'index');
+        document.getElementById('index-frame-link').href = './'+folder+'/index.html';
+        document.getElementById('frames-frame-link').href = './'+folder+'/frames.html';
+        setActive(anchor);
+        setActive(document.getElementById('index-frame-link'));
       }
-      function selectFrameNav(anchor, fileToShow) {
-        if (!folderSelected) return;
-        var src = document.getElementById('frame').src;
-        var newSrc = src.replace(/(.+\/).+\.html/, '$1'+fileToShow+'.html');
-        document.getElementById('frame').src = newSrc;
-        
-        var pills = document.getElementById('pill-nav');
-        for (var i = 0; i < pills.children.length; i++) {
-          var li = pills.children[i];
-          li.classList.remove('active');
-        }
+      function setActive(anchor) {
+        var ul = anchor.parentElement.parentElement;
+        for (var i = 0; i < ul.children.length; i++)
+          ul.children[i].classList.remove('active');
         anchor.parentNode.classList.add('active');
       }
     :css
@@ -48,19 +35,19 @@
   %body
     .container-fluid
       .sidebar
-        
         %ul
           - folders.each do |folder|
             %li
-              %a{id: "#{folder}-link", href: '#', onclick: "javascript: selectFolder(this, '#{folder}')"}= folder
+              %a{id: "#{folder}-link", href: "./#{folder}/index.html", target: 'frame', onclick: "javascript: selectFolder(this, '#{folder}')"}
+                = folder
             
       .content
         %ul#pill-nav.pills{"data-pills" => "pills"}
           %li
-            %a{id: "index-frame-link", href: '#', onclick: "javascript: selectFrameNav(this, 'index', false)"} No Frames
+            %a{id: "index-frame-link", href: '#', target: "frame", onclick: "javascript: setActive(this)"} No Frames
           %li
-            %a{id: "frames-frame-link", href: '#', onclick: "javascript: selectFrameNav(this, 'frames', false)"} Frames
-        %iframe#frame{frameborder: '0'}
+            %a{id: "frames-frame-link", href: '#', target: "frame", onclick: "javascript: setActive(this)"} Frames
+        %iframe#frame{name: 'frame', frameborder: '0'}
         %h3.title
           %span.bracket [
           MiniYard
