@@ -8,6 +8,7 @@ options = {
   root: Dir.pwd,
   doc: nil,
   cov: nil,
+  ci: nil,
   name: nil
 }
 
@@ -19,8 +20,11 @@ OptionParser.new do |opts|
   opts.on("-d SOURCE_DOCS""--doc=SOURCE_DOCS", "Docs folder to copy (requires --name option)") do |v|
     options[:doc] = v
   end
-  opts.on("-c SOURCE_COVERAGE", "--cov=SOURCE_COVERAGE", "Coverage folder to copy (requires --name option)") do |v|
+  opts.on("-o SOURCE_COVERAGE", "--cov=SOURCE_COVERAGE", "Coverage folder to copy (requires --name option)") do |v|
     options[:cov] = v
+  end
+  opts.on("-u CI_URL", "--url=CI_URL", "Full URL to CI for project") do |v|
+    options[:ci] = v
   end
   opts.on("-n NAME", "--name=NAME", "The name of the application folder in root. (Only applies to --cpdoc or --cpcov flags)") do |v|
     options[:name] = v
@@ -31,4 +35,4 @@ if options[:doc] || options[:cov]
   MiniYard::Copy.new(options).run
 end
 
-MiniYard::Generate.new(options[:root]).run
+MiniYard::Generate.new(options).run

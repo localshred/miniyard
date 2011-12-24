@@ -1,17 +1,20 @@
 require "miniyard/version"
+require "miniyard/folder"
 require 'fileutils'
 require 'haml'
 
 module MiniYard
   class Generate
     
-    def initialize(root)
-      raise 'Unable to generate MiniYard at path %s: not a directory' % path unless File.directory?(root)
-      @root = File.expand_path(root)
+    def initialize(options)
+      raise 'Unable to generate MiniYard at path %s: not a directory' % path unless File.directory?(options[:root])
+      @options = options
+      @root = File.expand_path(@options[:root])
     end
     
     def run
       $stdout.puts('Generating miniyard at '+@root)
+      write_ci_url if @options[:ci]
       FileUtils.rm(index_file) if index_exists?
       output = haml_render(index_template)
       write_file(index_file, output)
@@ -19,7 +22,7 @@ module MiniYard
     end
     
     def folders
-      @folders ||= Dir[File.join(@root, '*')].sort.select{|n| File.directory?(n) }.map{|n| File.basename(n) }
+      @folders ||= Dir[File.join(@root, '*')].sort.select{|n| File.directory?(n) }.map{|n| MiniYard::Folder.new(n) }
     end
     
     def index_template
@@ -51,6 +54,14 @@ module MiniYard
       File.open(file, 'w+') do |f|
         f.write(contents)
       end
+    end
+    
+    def write_ci_url
+      File.open(ci_path, 'w'){|f| f.write(@options[:ci]) }
+    end
+    
+    def ci_path
+      File.join(@root, @options[:name], 'ci.url')
     end
     
     def bootstrap_version
